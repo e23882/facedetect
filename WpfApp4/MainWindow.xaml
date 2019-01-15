@@ -5,8 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp4"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+      
+        <Grid Grid.Row="0" Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Background="LightGray" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Image x:Name="imgFace1" Width="200" Height="auto" MouseEnter="NewImg_MouseEnter"/>
+                <Image x:Name="imgFace2" Width="200" Height="auto" Margin="50,0,0,0" MouseEnter="NewImg_MouseEnter"/>
+            </StackPanel>
+            <Border Grid.Column="1" Margin="0,0,100,0" BorderThickness="1" BorderBrush="Red" Width="200" Height="200">
+                <Image x:Name="imgShow"/>
+            </Border>
+            
+        </Grid>
+        <DockPanel Grid.Row="1" >
+            <Button Content="＜" Width="30" Height="100" DockPanel.Dock="Left" Background="Transparent"/>
+            <StackPanel x:Name="spResult" Width="925"  Background="Gray" Orientation="Horizontal" DockPanel.Dock="Left"/>
+            <Button Content="＞" Width="30" Height="100" DockPanel.Dock="Right" Background="Transparent" />
+        </DockPanel>
+
+        <Grid Grid.Row="2">
+            <ProgressBar x:Name="pgProcess" Grid.Row="1" Background="LightGreen"/>
+            <TextBlock Text="100%" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+        </Grid>
+        <StackPanel Background="Black" Grid.Row="3" >
+            <Button x:Name="btStart" Content="start" Width="150" Padding="3,1,3,1" Click="BtStart_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
