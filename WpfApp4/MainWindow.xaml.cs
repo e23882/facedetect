@@ -27,17 +27,20 @@ namespace WpfApp4
         public MainWindow()
         {
             InitializeComponent();
-            imgFace1.Source = new BitmapImage(new Uri(@"D:\1.jpg"));
+            imgFace1.Source = new BitmapImage(new Uri(@"D:\3.jpg"));
             imgFace2.Source = new BitmapImage(new Uri(@"D:\2.jpg"));
             ScannerFace();
         }
+        List<System.Windows.Controls.Image> list = new List<System.Windows.Controls.Image>();
+        int imgCount = 0;
         public void ScannerFace()
         {
             CvInvoke.UseOpenCL = CvInvoke.HaveOpenCLCompatibleGpuDevice;
             var face = new CascadeClassifier(@"D:\haarcascade_frontalface_alt.xml");
-            var img = new Image<Bgr, byte>(@"D:\1.jpg");
+            var img = new Image<Bgr, byte>(@"D:\3.jpg");
             var img2 = new Image<Bgr, byte>(@"D:\2.jpg");
             CvInvoke.CvtColor(img, img2, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+            
             CvInvoke.EqualizeHist(img2, img2);
             var facesDetected = face.DetectMultiScale(img2, 1.1, 10, new System.Drawing.Size(50, 50));
             int count = 0;
@@ -55,7 +58,8 @@ namespace WpfApp4
             //取得檔案
             DirectoryInfo di = new DirectoryInfo(System.Environment.CurrentDirectory);
             string searchPattern = "*";
-            List<System.Windows.Controls.Image> list = new List<System.Windows.Controls.Image>();
+            list = new List<System.Windows.Controls.Image>();
+            imgCount = 0;
             foreach (FileInfo fi in di.GetFiles(searchPattern))
             {
                 if (fi.ToString().IndexOf("png") != -1 || fi.ToString().IndexOf("jpg") != -1)
@@ -65,8 +69,15 @@ namespace WpfApp4
                     list.Add(newImg);
                     newImg.Width = 50;
                     newImg.MouseEnter += NewImg_MouseEnter;
-                    spResult.Children.Add(newImg);
                 }
+            }
+
+            foreach (var item in list)
+            {
+                if (imgCount > 18)
+                    break;
+                spResult.Children.Add(item);
+                imgCount++;
             }
         }
 
@@ -89,5 +100,43 @@ namespace WpfApp4
         {
 
         }
+
+
+        int startIndex = 0;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            spResult.Children.Clear();
+            var bt = (sender as Button);
+            if (bt == null)
+                return;
+            if (bt.Tag.Equals("left"))
+            {
+                if(startIndex!=0)
+                    startIndex--;
+                int runCount = 0;
+                foreach (var item in list)
+                {
+                    if (runCount>startIndex)
+                    {
+                        spResult.Children.Add(item);
+                    }
+                    runCount++;
+                }
+            }
+            else if (bt.Tag.Equals("right"))
+            {
+                startIndex++;
+                int runCount = 0;
+                foreach (var item in list)
+                {
+                    if (runCount >= startIndex)
+                    {
+                        spResult.Children.Add(item);
+                    }
+                    runCount++;
+                }
+            }
+        }
+        
     }
 }
